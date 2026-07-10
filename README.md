@@ -3,6 +3,7 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.9.24-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
 [![Android](https://img.shields.io/badge/Android-Compile_SDK_37-green.svg?style=flat&logo=android)](https://developer.android.com)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=flat)](LICENSE)
+[![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?logo=ko-fi&logoColor=white)](https://ko-fi.com/dokuenreader)
 
 An online dictionary plugin for **Dokuen Japanese Reader** that integrates **JPDB** dictionary
 lookups and spaced repetition system (SRS) deck updates.
@@ -22,8 +23,6 @@ spec.
 When active, it queries the public JPDB API for definitions and embeds links for deck management
 within the dictionary results.
 
----
-
 ## Features
 
 * **Online Parse Integration:** Sends dictionary lookup queries to the JPDB `/parse` API.
@@ -31,8 +30,6 @@ within the dictionary results.
   actionable inline links.
 * **Clean Formatting:** Renders parts of speech, frequencies, meanings, and card action links using
   rich text spans and list blocks.
-
----
 
 ## Getting Started
 
@@ -50,8 +47,6 @@ within the dictionary results.
 4. Paste your API key into the configuration field and tap **Save**.
 5. Exit the Configuration page, then back in the Plugin Manager select the JPDB plugin to make it
    active.
-
----
 
 ## Development & Build
 
@@ -75,7 +70,11 @@ Run the unit tests:
 ./gradlew test
 ```
 
----
+## Support
+
+If you use this project and it helps you out, please consider supporting its development!
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/dokuenreader)
 
 ## License
 
