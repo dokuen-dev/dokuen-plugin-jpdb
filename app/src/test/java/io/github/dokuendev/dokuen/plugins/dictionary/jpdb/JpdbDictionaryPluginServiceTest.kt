@@ -1,9 +1,12 @@
 package io.github.dokuendev.dokuen.plugins.dictionary.jpdb
 
 import android.os.Bundle
+import io.github.dokuendev.dokuenreader.dictionary.CustomActionContext
 import io.github.dokuendev.dokuenreader.dictionary.CustomActionResult
 import io.github.dokuendev.dokuenreader.dictionary.DictionaryErrorCode
 import io.github.dokuendev.dokuenreader.dictionary.DictionaryException
+import io.github.dokuendev.dokuenreader.dictionary.ImageRequestResult
+import io.github.dokuendev.dokuenreader.dictionary.ImageRequestSource
 import io.github.dokuendev.dokuenreader.plugin.core.PluginHostConfigKeys
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -13,6 +16,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -170,7 +174,8 @@ class JpdbDictionaryPluginServiceTest {
 
     @Test
     fun testExecuteCustomActionSuccess() = runBlocking {
-        val service = JpdbDictionaryPluginService()
+        // Created through Robolectric so that the service has the context it reads its strings from.
+        val service = Robolectric.buildService(JpdbDictionaryPluginService::class.java).create().get()
         val config = Bundle().apply {
             putString("api_key", "mock_key")
             putInt("deck_id", 42)
@@ -186,7 +191,20 @@ class JpdbDictionaryPluginServiceTest {
         clientField.isAccessible = true
         clientField.set(service, mockClient)
 
-        val actionResult = service.onExecuteCustomAction("add_card?vid=10001&sid=20002")
+        val progressMessages = mutableListOf<String?>()
+        val context = object : CustomActionContext {
+            override suspend fun requestImage(source: ImageRequestSource, interactive: Boolean) =
+                ImageRequestResult.NoImage
+
+            override suspend fun requestClipboardText(): String? = null
+
+            override fun setProgressMessage(message: String?) {
+                progressMessages += message
+            }
+        }
+
+        val actionResult = service.onExecuteCustomAction("add_card?vid=10001&sid=20002", context)
+        assertEquals(listOf("Adding to JPDB deck…"), progressMessages)
         assertTrue(actionResult is CustomActionResult.SuccessMessage)
         assertEquals("Added word to JPDB deck!", (actionResult as CustomActionResult.SuccessMessage).message)
         assertNotNull(capturedUrl)

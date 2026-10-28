@@ -2,6 +2,7 @@ package io.github.dokuendev.dokuen.plugins.dictionary.jpdb
 
 import android.os.Bundle
 import android.util.Log
+import io.github.dokuendev.dokuenreader.dictionary.CustomActionContext
 import io.github.dokuendev.dokuenreader.dictionary.CustomActionResult
 import io.github.dokuendev.dokuenreader.dictionary.DictionaryErrorCode
 import io.github.dokuendev.dokuenreader.dictionary.DictionaryException
@@ -162,7 +163,10 @@ class JpdbDictionaryPluginService : DictionaryPluginService() {
         }
     }
 
-    override suspend fun onExecuteCustomAction(actionPayload: String): CustomActionResult {
+    override suspend fun onExecuteCustomAction(
+        actionPayload: String,
+        context: CustomActionContext
+    ): CustomActionResult {
         Log.d(TAG, "Executing custom action: $actionPayload")
         val client = apiClient ?: throw DictionaryException(
             DictionaryErrorCode.SERVICE_DISABLED,
@@ -186,6 +190,7 @@ class JpdbDictionaryPluginService : DictionaryPluginService() {
             )
         }
 
+        context.setProgressMessage(getString(R.string.progress_adding_card))
         try {
             Log.d(TAG, "Attempting to add card (vid: $vid, sid: $sid) to deck $deckId...")
             client.addCard(deckId, vid, sid)

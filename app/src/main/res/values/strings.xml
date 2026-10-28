@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">JPDB for Dokuen</string>
+    <string name="progress_adding_card">Adding to JPDB deck…</string>
 </resources>
